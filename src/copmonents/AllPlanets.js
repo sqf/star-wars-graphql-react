@@ -1,15 +1,24 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ApolloClient from "apollo-boost";
 import gql from "graphql-tag";
 import {ApolloProvider, Query} from "react-apollo";
+import PlanetModal from "./PlanetModal";
 
 const client = new ApolloClient({
     uri: "https://swapi.apis.guru/\n"
 });
 
-const Planets = () => (
-    <Query
-        query={gql`
+function AllPlanets() {
+    const [shoudShowPlanetDetails, setShoudShowPlanetDetails] = useState(false);
+    const [selectedPlanetId, setSelectedPlanetId] = useState(null);
+    function handlePlanetClick() {
+        setSelectedPlanetId(this.planetId);
+        setShoudShowPlanetDetails(true);
+    }
+
+    const Planets = () => (
+        <Query
+            query={gql`
       {
         allPlanets {
           totalCount
@@ -31,23 +40,21 @@ const Planets = () => (
         }
       }
     `}>
-        {({loading, error, data}) => {
-            if (loading) return <p>Loading...</p>;
-            if (error) return <p>Error :(</p>;
+            {({loading, error, data}) => {
+                if (loading) return <tr><td>Loading...</td></tr>;
+                if (error) return <tr><td>Error :(</td></tr>;
 
-            console.log(data);
+                console.log(data);
 
-            return data.allPlanets.planets.map(({id, created, name}) => (
-                <tr key={id}>
-                    <td>{name}</td>
-                    <td>{created}</td>
-                </tr>
-            ));
-        }}
-    </Query>
-);
-
-function AllPlanets() {
+                return data.allPlanets.planets.map(({id, name, gravity}) => (
+                    <tr key={id}>
+                        <td onClick={handlePlanetClick.bind({planetId: id})}>{name}</td>
+                        <td>{gravity}</td>
+                    </tr>
+                ));
+            }}
+        </Query>
+    );
     return (
         <ApolloProvider client={client}>
             <div className="App">
@@ -56,7 +63,7 @@ function AllPlanets() {
                         <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Created</th>
+                            <th>Gravity</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -65,6 +72,11 @@ function AllPlanets() {
                     </table>
                 </header>
             </div>
+            <PlanetModal
+                shouldBeVisible={shoudShowPlanetDetails}
+                setShoudShowPlanetDetails={setShoudShowPlanetDetails}
+                selectedPlanetId={selectedPlanetId}
+            />
         </ApolloProvider>
     );
 }
