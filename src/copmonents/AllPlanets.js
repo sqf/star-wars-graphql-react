@@ -55,6 +55,7 @@ function AllPlanets() {
             }}
         </Query>
     );
+
     return (
         <ApolloProvider client={client}>
             <div className="App">
