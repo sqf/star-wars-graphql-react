@@ -26,10 +26,22 @@ function PlanetModal(props) {
     `}
             variables={{selectedPlanetId: props.selectedPlanetId}}>
             {({loading, error, data}) => {
-                if (loading) return <span>Loading...</span>;
-                if (error) return <span>Error :(</span>;
+                if (loading) return <Tr><Td>Loading...</Td></Tr>;
+                if (error) return <Td><Td>Error :(</Td></Td>;
 
-                console.log(data);
+                function displayArray(array) {
+                    const arrayLength = array.length;
+                     return array.map((element, index) => {
+                        let arrayElementToDisplay;
+                        const isLastElement = (arrayLength === index + 1);
+                        if (!isLastElement)
+                            arrayElementToDisplay=(<span key={index}>{element}, </span>);
+                        else
+                            arrayElementToDisplay=(<span key={index}>{element}</span>);
+
+                        return arrayElementToDisplay;
+                    });
+                }
 
                 return (
                     <Tr>
@@ -39,8 +51,8 @@ function PlanetModal(props) {
                     <Td>{data.planet.orbitalPeriod}</Td>
                     <Td>{data.planet.gravity}</Td>
                     <Td>{data.planet.population}</Td>
-                    <Td>{data.planet.climates}</Td>
-                    <Td>{data.planet.terrains}</Td>
+                    <Td>{displayArray(data.planet.climates)}</Td>
+                    <Td>{displayArray(data.planet.terrains)}</Td>
                     <Td>{data.planet.surfaceWater}</Td>
                     </Tr>
                 )
@@ -48,14 +60,12 @@ function PlanetModal(props) {
         </Query>
     );
     return (
-        <Modal
-            isOpen={props.shouldBeVisible}
-            contentLabel="Example Modal">
+        <Modal isOpen={props.shouldBeVisible} contentLabel="Planet Modal" >
             <CloseButton onClick={() => {
                 props.setShoudShowPlanetDetails(false)
             }}>close</CloseButton>
             <ModalCard>
-            <table style={{ borderCollapse: 'collapse'}}>
+            <Table>
                 <tbody>
                 <Tr>
                 <Td>name</Td>
@@ -70,11 +80,15 @@ function PlanetModal(props) {
                 </Tr>
                 <Planet/>
                 </tbody>
-            </table>
+            </Table>
             </ModalCard>
         </Modal>
     )
 }
+
+const Table = styled.table`
+    borderCollapse: 'collapse'
+`;
 
 const Tr = styled.tr`
     display: block;
@@ -85,6 +99,8 @@ const Tr = styled.tr`
 const Td = styled.td`
     display: block;
     border: 1px solid black;
+    height: 23px;
+    padding: 3px;
 `;
 
 const ModalCard = styled.div`
