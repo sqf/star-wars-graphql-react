@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 function PlanetModal(props) {
     Modal.setAppElement('#root');
-    let Planet = () => (
+    let PlanetAttributes = () => (
         <Query
             query={gql`
       query Planet($selectedPlanetId: ID) {
@@ -111,19 +111,19 @@ function PlanetModal(props) {
                 </thead>
                 <tbody>
                 <Tr>
-                    <Td planetAttribute>Name</Td>
-                    <Td planetAttribute>Diameter</Td>
-                    <Td planetAttribute>Rotation period</Td>
-                    <Td planetAttribute>Orbital period</Td>
-                    <Td planetAttribute>Gravity</Td>
-                    <Td planetAttribute>Population</Td>
-                    <Td planetAttribute>Climates</Td>
-                    <Td planetAttribute>Terrains</Td>
-                    <Td planetAttribute>Surface water</Td>
-                    <Td planetAttribute>Residents</Td>
-                    <Td planetAttribute>Films</Td>
+                    <Td planetAttributeName>Name</Td>
+                    <Td planetAttributeName>Diameter</Td>
+                    <Td planetAttributeName>Rotation period</Td>
+                    <Td planetAttributeName>Orbital period</Td>
+                    <Td planetAttributeName>Gravity</Td>
+                    <Td planetAttributeName>Population</Td>
+                    <Td planetAttributeName>Climates</Td>
+                    <Td planetAttributeName>Terrains</Td>
+                    <Td planetAttributeName>Surface water</Td>
+                    <Td planetAttributeName>Residents</Td>
+                    <Td planetAttributeName>Films</Td>
                 </Tr>
-                <Planet/>
+                <PlanetAttributes/>
                 </tbody>
             </Table>
             </ModalCard>
@@ -132,7 +132,7 @@ function PlanetModal(props) {
 }
 
 const Table = styled.table`
-    borderCollapse: 'collapse'
+    borderCollapse: 'collapse';
 `;
 
 const Th = styled.th`
@@ -148,16 +148,18 @@ const Tr = styled.tr`
 const Td = styled.td`
     display: block;
     border: 1px solid black;
-    height: 23px;
+    min-height: 23px;
     padding: 3px;
-    font-weight: ${props => props.planetAttribute ? "bold" : "normal" };
+    font-weight: ${props => props.planetAttributeName ? "bold" : "normal" };
 `;
 
 const ModalCard = styled.div`
   position: relative;
-  min-width: 320px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-block;
   z-index: 10;
-  margin: 50px;
   background: white;
   border-radius: 5px;
   padding: 15px;

@@ -44,8 +44,6 @@ function AllPlanets() {
                 if (loading) return <tr><td>Loading...</td></tr>;
                 if (error) return <tr><td>Error :(</td></tr>;
 
-                console.log(data);
-
                 return data.allPlanets.planets.map(({id, name, gravity}) => (
                     <tr key={id}>
                         <td onClick={handlePlanetClick.bind({planetId: id})}>{name}</td>
