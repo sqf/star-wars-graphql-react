@@ -6,7 +6,8 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 
 function PlanetModal(props) {
-    Modal.setAppElement('#root');
+    if (process.env.NODE_ENV !== 'test')
+        Modal.setAppElement('#root');
     let PlanetAttributes = () => (
         <Query
             query={gql`
@@ -42,13 +43,13 @@ function PlanetModal(props) {
 
                 function displayArray(array) {
                     const arrayLength = array.length;
-                     return array.map((element, index) => {
+                    return array.map((element, index) => {
                         let arrayElementToDisplay;
                         const isLastElement = (arrayLength === index + 1);
                         if (!isLastElement)
-                            arrayElementToDisplay=(<span key={index}>{element}, </span>);
+                            arrayElementToDisplay = (<span key={index}>{element}, </span>);
                         else
-                            arrayElementToDisplay=(<span key={index}>{element}</span>);
+                            arrayElementToDisplay = (<span key={index}>{element}</span>);
 
                         return arrayElementToDisplay;
                     });
@@ -60,9 +61,9 @@ function PlanetModal(props) {
                         let residentToDisplay;
                         const isLastResident = (numberOfResidents === index + 1);
                         if (!isLastResident)
-                            residentToDisplay=(<span key={index}>{resident.name}, </span>);
+                            residentToDisplay = (<span key={index}>{resident.name}, </span>);
                         else
-                            residentToDisplay=(<span key={index}>{resident.name}</span>);
+                            residentToDisplay = (<span key={index}>{resident.name}</span>);
 
                         return residentToDisplay;
                     });
@@ -74,9 +75,9 @@ function PlanetModal(props) {
                         let filmToDisplay;
                         const isLastFilm = (numberOfFilms === index + 1);
                         if (!isLastFilm)
-                            filmToDisplay=(<span key={index}>{film.title}, </span>);
+                            filmToDisplay = (<span key={index}>{film.title}, </span>);
                         else
-                            filmToDisplay=(<span key={index}>{film.title}</span>);
+                            filmToDisplay = (<span key={index}>{film.title}</span>);
 
                         return filmToDisplay;
                     });
@@ -101,32 +102,32 @@ function PlanetModal(props) {
         </Query>
     );
     return (
-        <Modal isOpen={props.shouldBeVisible} contentLabel="Planet Modal" >
+        <Modal isOpen={props.shouldBeVisible} contentLabel="Planet Modal">
             <CloseButton onClick={() => {
                 props.setShoudShowPlanetDetails(false)
             }}>close</CloseButton>
             <ModalCard>
-            <Table>
-                <thead>
-                <tr><Th>Planet Attributes</Th></tr>
-                </thead>
-                <tbody>
-                <Tr>
-                    <Td planetAttributeName>Name</Td>
-                    <Td planetAttributeName>Diameter</Td>
-                    <Td planetAttributeName>Rotation period</Td>
-                    <Td planetAttributeName>Orbital period</Td>
-                    <Td planetAttributeName>Gravity</Td>
-                    <Td planetAttributeName>Population</Td>
-                    <Td planetAttributeName>Climates</Td>
-                    <Td planetAttributeName>Terrains</Td>
-                    <Td planetAttributeName>Surface water</Td>
-                    <Td planetAttributeName>Residents</Td>
-                    <Td planetAttributeName>Films</Td>
-                </Tr>
-                <PlanetAttributes/>
-                </tbody>
-            </Table>
+                <Table>
+                    <thead>
+                    <tr><Th>Planet Attributes</Th></tr>
+                    </thead>
+                    <tbody>
+                    <Tr>
+                        <Td planetAttributeName>Name</Td>
+                        <Td planetAttributeName>Diameter</Td>
+                        <Td planetAttributeName>Rotation period</Td>
+                        <Td planetAttributeName>Orbital period</Td>
+                        <Td planetAttributeName>Gravity</Td>
+                        <Td planetAttributeName>Population</Td>
+                        <Td planetAttributeName>Climates</Td>
+                        <Td planetAttributeName>Terrains</Td>
+                        <Td planetAttributeName>Surface water</Td>
+                        <Td planetAttributeName>Residents</Td>
+                        <Td planetAttributeName>Films</Td>
+                    </Tr>
+                    <PlanetAttributes/>
+                    </tbody>
+                </Table>
             </ModalCard>
         </Modal>
     )
@@ -151,7 +152,7 @@ const Td = styled.td`
     border: 1px solid black;
     min-height: 23px;
     padding: 3px;
-    font-weight: ${props => props.planetAttributeName ? "bold" : "normal" };
+    font-weight: ${props => props.planetAttributeName ? "bold" : "normal"};
 `;
 
 const ModalCard = styled.div`
