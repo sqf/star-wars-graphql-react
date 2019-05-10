@@ -8,12 +8,12 @@ const client = new ApolloClient({
     uri: "https://swapi.apis.guru/\n"
 });
 
-const OFFSET = 5;
+const OFFSET = 10;
 
 function AllPlanets() {
     const [shoudShowPlanetDetails, setShoudShowPlanetDetails] = useState(false);
     const [selectedPlanetId, setSelectedPlanetId] = useState(null);
-    const [paginationState, setPaginationState] = useState({first: OFFSET, last: null, startCursor: null, endCursor: null});
+    const [paginationState, setPaginationState] = useState({first: OFFSET, last: null, startCursor: null, endCursor: null, counter: 0});
 
     function handlePlanetClick() {
         setSelectedPlanetId(this.planetId);
@@ -21,11 +21,11 @@ function AllPlanets() {
     }
 
     function handleNextPageClick(pageInfo) {
-        setPaginationState({first: OFFSET, last: null, startCursor: null, endCursor: pageInfo.endCursor});
+        setPaginationState({first: OFFSET, last: null, startCursor: null, endCursor: pageInfo.endCursor, counter: paginationState.counter + 1});
     }
 
     function handlePreviousPageClick(pageInfo) {
-        setPaginationState({first: null, last: OFFSET, startCursor: pageInfo.startCursor, endCursor: null});
+        setPaginationState({first: null, last: OFFSET, startCursor: pageInfo.startCursor, endCursor: null, counter: paginationState.counter - 1});
     }
 
     const Planets = () => (
@@ -54,6 +54,7 @@ function AllPlanets() {
             edited
             id
           }
+          totalCount
         }
       }
     `}
@@ -68,11 +69,12 @@ function AllPlanets() {
                     }
                 };
 
-                console.log(data.allPlanets.pageInfo);
+                const isPreviousPageAvailable = paginationState.counter > 0;
+                const isNextPageAvailable = paginationState.counter + 1 < data.allPlanets.totalCount / OFFSET;
                 const paginationComponents = (
                     <tr key={'pagination'} >
-                        <td style={getPaginationLinksStyle(data.allPlanets.pageInfo.hasPreviousPage)} onClick={() => {handlePreviousPageClick(data.allPlanets.pageInfo)}}>Previous</td>
-                        <td style={getPaginationLinksStyle(data.allPlanets.pageInfo.hasNextPage)} onClick={() => {handleNextPageClick(data.allPlanets.pageInfo)}}>Next</td>
+                        <td style={getPaginationLinksStyle(isPreviousPageAvailable)} onClick={() => {if(isPreviousPageAvailable) handlePreviousPageClick(data.allPlanets.pageInfo)}}>Previous</td>
+                        <td style={getPaginationLinksStyle(isNextPageAvailable)} onClick={() => {if(isNextPageAvailable) handleNextPageClick(data.allPlanets.pageInfo)}}>Next</td>
                     </tr>);
 
                 return [...data.allPlanets.planets.map(({id, name, gravity}) => (
