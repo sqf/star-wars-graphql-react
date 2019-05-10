@@ -20,12 +20,14 @@ function AllPlanets() {
         setShoudShowPlanetDetails(true);
     }
 
-    function handleNextPageClick(pageInfo) {
-        setPaginationState({first: OFFSET, last: null, startCursor: null, endCursor: pageInfo.endCursor, counter: paginationState.counter + 1});
+    function handleNextPageClick() {
+        if (this.isNextPageAvailable)
+            setPaginationState({first: OFFSET, last: null, startCursor: null, endCursor: this.pageInfo.endCursor, counter: paginationState.counter + 1});
     }
 
-    function handlePreviousPageClick(pageInfo) {
-        setPaginationState({first: null, last: OFFSET, startCursor: pageInfo.startCursor, endCursor: null, counter: paginationState.counter - 1});
+    function handlePreviousPageClick() {
+        if (this.isPreviousPageAvailable)
+            setPaginationState({first: null, last: OFFSET, startCursor: this.pageInfo.startCursor, endCursor: null, counter: paginationState.counter - 1});
     }
 
     const Planets = () => (
@@ -73,8 +75,14 @@ function AllPlanets() {
                 const isNextPageAvailable = paginationState.counter + 1 < data.allPlanets.totalCount / OFFSET;
                 const paginationComponents = (
                     <tr key={'pagination'} >
-                        <td style={getPaginationLinksStyle(isPreviousPageAvailable)} onClick={() => {if(isPreviousPageAvailable) handlePreviousPageClick(data.allPlanets.pageInfo)}}>Previous</td>
-                        <td style={getPaginationLinksStyle(isNextPageAvailable)} onClick={() => {if(isNextPageAvailable) handleNextPageClick(data.allPlanets.pageInfo)}}>Next</td>
+                        <td style={getPaginationLinksStyle(isPreviousPageAvailable)}
+                            onClick={handlePreviousPageClick.bind({isPreviousPageAvailable, pageInfo: data.allPlanets.pageInfo})}>
+                            Previous
+                        </td>
+                        <td style={getPaginationLinksStyle(isNextPageAvailable)}
+                            onClick={handleNextPageClick.bind({isNextPageAvailable, pageInfo: data.allPlanets.pageInfo})}>
+                            Next
+                        </td>
                     </tr>);
 
                 return [...data.allPlanets.planets.map(({id, name, gravity}) => (
