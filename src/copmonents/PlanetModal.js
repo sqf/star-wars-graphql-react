@@ -21,13 +21,18 @@ function PlanetModal(props) {
             climates
             terrains
             surfaceWater
+            residentConnection {
+                residents {
+                    name
+                }
+            }
           }
         }
     `}
             variables={{selectedPlanetId: props.selectedPlanetId}}>
             {({loading, error, data}) => {
                 if (loading) return <Tr><Td>Loading...</Td></Tr>;
-                if (error) return <Td><Td>Error :(</Td></Td>;
+                if (error) return <Tr><Td>Error :(</Td></Tr>;
 
                 function displayArray(array) {
                     const arrayLength = array.length;
@@ -43,17 +48,33 @@ function PlanetModal(props) {
                     });
                 }
 
+                function displayResidents(residents) {
+                    console.log(residents);
+                    const numberOfResidents = residents.length;
+                    return residents.map((resident, index) => {
+                        let residentToDisplay;
+                        const isLastResident = (numberOfResidents === index + 1);
+                        if (!isLastResident)
+                            residentToDisplay=(<span key={index}>{resident.name}, </span>);
+                        else
+                            residentToDisplay=(<span key={index}>{resident.name}</span>);
+
+                        return residentToDisplay;
+                    });
+                }
+
                 return (
                     <Tr>
-                    <Td>{data.planet.name}</Td>
-                    <Td>{data.planet.diameter}</Td>
-                    <Td>{data.planet.rotationPeriod}</Td>
-                    <Td>{data.planet.orbitalPeriod}</Td>
-                    <Td>{data.planet.gravity}</Td>
-                    <Td>{data.planet.population}</Td>
-                    <Td>{displayArray(data.planet.climates)}</Td>
-                    <Td>{displayArray(data.planet.terrains)}</Td>
-                    <Td>{data.planet.surfaceWater}</Td>
+                        <Td>{data.planet.name}</Td>
+                        <Td>{data.planet.diameter}</Td>
+                        <Td>{data.planet.rotationPeriod}</Td>
+                        <Td>{data.planet.orbitalPeriod}</Td>
+                        <Td>{data.planet.gravity}</Td>
+                        <Td>{data.planet.population}</Td>
+                        <Td>{displayArray(data.planet.climates)}</Td>
+                        <Td>{displayArray(data.planet.terrains)}</Td>
+                        <Td>{data.planet.surfaceWater}</Td>
+                        <Td>{displayResidents(data.planet.residentConnection.residents)}</Td>
                     </Tr>
                 )
             }}
@@ -66,17 +87,21 @@ function PlanetModal(props) {
             }}>close</CloseButton>
             <ModalCard>
             <Table>
+                <thead>
+                <tr><Th>Planet Attributes</Th></tr>
+                </thead>
                 <tbody>
                 <Tr>
-                <Td>name</Td>
-                <Td>diameter</Td>
-                <Td>rotationPeriod</Td>
-                <Td>orbitalPeriod</Td>
-                <Td>gravity</Td>
-                <Td>population</Td>
-                <Td>climates</Td>
-                <Td>terrains</Td>
-                <Td>surfaceWater</Td>
+                    <Td planetAttribute>name</Td>
+                    <Td planetAttribute>diameter</Td>
+                    <Td planetAttribute>rotationPeriod</Td>
+                    <Td planetAttribute>orbitalPeriod</Td>
+                    <Td planetAttribute>gravity</Td>
+                    <Td planetAttribute>population</Td>
+                    <Td planetAttribute>climates</Td>
+                    <Td planetAttribute>terrains</Td>
+                    <Td planetAttribute>surfaceWater</Td>
+                    <Td planetAttribute>Residents</Td>
                 </Tr>
                 <Planet/>
                 </tbody>
@@ -90,10 +115,14 @@ const Table = styled.table`
     borderCollapse: 'collapse'
 `;
 
+const Th = styled.th`
+    color: red;
+`;
+
 const Tr = styled.tr`
     display: block;
     float: left;
-    border: 1px solid black;
+    border: 1px solid black; 
 `;
 
 const Td = styled.td`
@@ -101,6 +130,7 @@ const Td = styled.td`
     border: 1px solid black;
     height: 23px;
     padding: 3px;
+    font-weight: ${props => props.planetAttribute ? "bold" : "normal" };
 `;
 
 const ModalCard = styled.div`
