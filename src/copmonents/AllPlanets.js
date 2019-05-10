@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import ApolloClient from "apollo-boost";
 import gql from "graphql-tag";
 import {ApolloProvider, Query} from "react-apollo";
@@ -65,7 +65,7 @@ function AllPlanets() {
                 if (loading) return <tr><td>Loading...</td></tr>;
                 if (error) return <tr><td>Error :(</td></tr>;
 
-                let getPaginationLinksStyle = (isAvailable) => {
+                let getPaginationComponentStyle = (isAvailable) => {
                     return {
                         opacity: isAvailable ? 1 : 0.4
                     }
@@ -75,11 +75,11 @@ function AllPlanets() {
                 const isNextPageAvailable = paginationState.counter + 1 < data.allPlanets.totalCount / OFFSET;
                 const paginationComponents = (
                     <tr key={'pagination'} >
-                        <td style={getPaginationLinksStyle(isPreviousPageAvailable)}
+                        <td style={getPaginationComponentStyle(isPreviousPageAvailable)}
                             onClick={handlePreviousPageClick.bind({isPreviousPageAvailable, pageInfo: data.allPlanets.pageInfo})}>
                             Previous
                         </td>
-                        <td style={getPaginationLinksStyle(isNextPageAvailable)}
+                        <td style={getPaginationComponentStyle(isNextPageAvailable)}
                             onClick={handleNextPageClick.bind({isNextPageAvailable, pageInfo: data.allPlanets.pageInfo})}>
                             Next
                         </td>

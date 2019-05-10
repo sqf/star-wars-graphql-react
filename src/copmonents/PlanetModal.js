@@ -5,12 +5,7 @@ import {Query} from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 
-function PlanetModal(props) {
-    if (process.env.NODE_ENV !== 'test')
-        Modal.setAppElement('#root');
-    let PlanetAttributes = () => (
-        <Query
-            query={gql`
+export const GET_PLANET_QUERY = gql`
       query Planet($selectedPlanetId: ID) {
         planet(id: $selectedPlanetId) {
             id
@@ -35,8 +30,13 @@ function PlanetModal(props) {
             }
           }
         }
-    `}
-            variables={{selectedPlanetId: props.selectedPlanetId}}>
+    `;
+
+function PlanetModal(props) {
+    if (process.env.NODE_ENV !== 'test')
+        Modal.setAppElement('#root');
+    let PlanetAttributes = () => (
+        <Query query={GET_PLANET_QUERY} variables={{selectedPlanetId: props.selectedPlanetId}}>
             {({loading, error, data}) => {
                 if (loading) return <Tr><Td>Loading...</Td></Tr>;
                 if (error) return <Tr><Td>Error :(</Td></Tr>;
