@@ -13,11 +13,15 @@ const FIRST = 10;
 function AllPlanets() {
     const [shoudShowPlanetDetails, setShoudShowPlanetDetails] = useState(false);
     const [selectedPlanetId, setSelectedPlanetId] = useState(null);
-    const [paginationState, setPaginationState] = useState({startCursor: 10, endCursor: null});
+    const [paginationState, setPaginationState] = useState({startCursor: null, endCursor: null});
 
     function handlePlanetClick() {
         setSelectedPlanetId(this.planetId);
         setShoudShowPlanetDetails(true);
+    }
+
+    function handleNextPageClick(pageInfo) {
+        setPaginationState({startCursor: pageInfo.startCursor, endCursor: pageInfo.endCursor});
     }
 
     const Planets = () => (
@@ -49,7 +53,7 @@ function AllPlanets() {
         }
       }
     `}
-     variables={{ cursor: null }}>
+     variables={{ cursor: paginationState.endCursor }}>
             {({loading, error, data}) => {
                 if (loading) return <tr><td>Loading...</td></tr>;
                 if (error) return <tr><td>Error :(</td></tr>;
@@ -60,19 +64,18 @@ function AllPlanets() {
                     }
                 };
 
-                const shouldUpdatePaginationState =
-                    (paginationState.startCursor !== data.allPlanets.pageInfo.startCursor) ||
-                        (paginationState.endCursor !== data.allPlanets.pageInfo.endCursor);
-
-                if (shouldUpdatePaginationState)
-                    setPaginationState({startCursor: data.allPlanets.pageInfo.startCursor, endCursor: data.allPlanets.pageInfo.endCursor});
+                const paginationComponents = (
+                    <tr key={'pagination'} >
+                        <td style={getPaginationLinksStyle(data.allPlanets.pageInfo.hasPreviousPage)}>Previous</td>
+                        <td style={getPaginationLinksStyle(data.allPlanets.pageInfo.hasNextPage)} onClick={() => {handleNextPageClick(data.allPlanets.pageInfo)}}>Next</td>
+                    </tr>);
 
                 return [...data.allPlanets.planets.map(({id, name, gravity}) => (
                     <tr key={id}>
                         <td onClick={handlePlanetClick.bind({planetId: id})}>{name}</td>
                         <td>{gravity}</td>
                     </tr>
-                )), (<tr key={'pagination'} ><td style={getPaginationLinksStyle(data.allPlanets.pageInfo.hasPreviousPage)}>Previous</td><td style={getPaginationLinksStyle(data.allPlanets.pageInfo.hasNextPage)}>Next</td></tr>)];
+                )), paginationComponents];
             }}
         </Query>
     );
