@@ -85,10 +85,10 @@ function AllPlanets() {
                         </td>
                     </tr>);
 
-                return [...data.allPlanets.planets.map(({id, name, gravity}) => (
+                return [...data.allPlanets.planets.map(({id, name, diameter}) => (
                     <tr key={id}>
-                        <td onClick={handlePlanetClick.bind({planetId: id})}>{name}</td>
-                        <td>{gravity}</td>
+                        <td onClick={handlePlanetClick.bind({planetId: id})} >{name}</td>
+                        <td>{diameter}</td>
                     </tr>
                 )), paginationComponents];
             }}
@@ -103,7 +103,7 @@ function AllPlanets() {
                         <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Gravity</th>
+                            <th>Diameter</th>
                         </tr>
                         </thead>
                         <tbody>

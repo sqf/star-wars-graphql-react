@@ -1,5 +1,6 @@
 import React from 'react'
 import Modal from 'react-modal';
+import PropTypes from 'prop-types';
 import {Query} from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
@@ -176,5 +177,12 @@ const CloseButton = styled.button`
   &:hover {
     cursor: pointer;
   }`;
+
+// PropTypes
+PlanetModal.propTypes = {
+    shouldBeVisible: PropTypes.bool.isRequired,
+    setShoudShowPlanetDetails: PropTypes.func.isRequired,
+    selectedPlanetId: PropTypes.string
+};
 
 export default PlanetModal;
