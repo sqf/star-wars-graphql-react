@@ -26,6 +26,11 @@ function PlanetModal(props) {
                     name
                 }
             }
+            filmConnection {
+                films {
+                    title
+                }
+            }
           }
         }
     `}
@@ -49,7 +54,6 @@ function PlanetModal(props) {
                 }
 
                 function displayResidents(residents) {
-                    console.log(residents);
                     const numberOfResidents = residents.length;
                     return residents.map((resident, index) => {
                         let residentToDisplay;
@@ -60,6 +64,20 @@ function PlanetModal(props) {
                             residentToDisplay=(<span key={index}>{resident.name}</span>);
 
                         return residentToDisplay;
+                    });
+                }
+
+                function displayFilms(films) {
+                    const numberOfFilms = films.length;
+                    return films.map((film, index) => {
+                        let filmToDisplay;
+                        const isLastFilm = (numberOfFilms === index + 1);
+                        if (!isLastFilm)
+                            filmToDisplay=(<span key={index}>{film.title}, </span>);
+                        else
+                            filmToDisplay=(<span key={index}>{film.title}</span>);
+
+                        return filmToDisplay;
                     });
                 }
 
@@ -75,6 +93,7 @@ function PlanetModal(props) {
                         <Td>{displayArray(data.planet.terrains)}</Td>
                         <Td>{data.planet.surfaceWater}</Td>
                         <Td>{displayResidents(data.planet.residentConnection.residents)}</Td>
+                        <Td>{displayFilms(data.planet.filmConnection.films)}</Td>
                     </Tr>
                 )
             }}
@@ -92,16 +111,17 @@ function PlanetModal(props) {
                 </thead>
                 <tbody>
                 <Tr>
-                    <Td planetAttribute>name</Td>
-                    <Td planetAttribute>diameter</Td>
-                    <Td planetAttribute>rotationPeriod</Td>
-                    <Td planetAttribute>orbitalPeriod</Td>
-                    <Td planetAttribute>gravity</Td>
-                    <Td planetAttribute>population</Td>
-                    <Td planetAttribute>climates</Td>
-                    <Td planetAttribute>terrains</Td>
-                    <Td planetAttribute>surfaceWater</Td>
+                    <Td planetAttribute>Name</Td>
+                    <Td planetAttribute>Diameter</Td>
+                    <Td planetAttribute>Rotation period</Td>
+                    <Td planetAttribute>Orbital period</Td>
+                    <Td planetAttribute>Gravity</Td>
+                    <Td planetAttribute>Population</Td>
+                    <Td planetAttribute>Climates</Td>
+                    <Td planetAttribute>Terrains</Td>
+                    <Td planetAttribute>Surface water</Td>
                     <Td planetAttribute>Residents</Td>
+                    <Td planetAttribute>Films</Td>
                 </Tr>
                 <Planet/>
                 </tbody>
