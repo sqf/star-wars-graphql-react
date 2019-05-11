@@ -35,9 +35,11 @@ export const GET_PLANET_QUERY = gql`
 function PlanetModal(props) {
     if (process.env.NODE_ENV !== 'test')
         Modal.setAppElement('#root');
-    let PlanetAttributes = () => (
+
+    const PlanetAttributes = () => (
         <Query query={GET_PLANET_QUERY} variables={{selectedPlanetId: props.selectedPlanetId}}>
             {({loading, error, data}) => {
+                console.log(data);
                 if (loading) return <Tr><Td>Loading...</Td></Tr>;
                 if (error) return <Tr><Td>Error :(</Td></Tr>;
 
