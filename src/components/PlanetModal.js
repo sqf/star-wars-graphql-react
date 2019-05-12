@@ -1,7 +1,7 @@
 import React from 'react'
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
-import {Query} from "react-apollo";
+import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 
@@ -37,8 +37,8 @@ function PlanetModal(props) {
         Modal.setAppElement('#root');
 
     const PlanetAttributes = () => (
-        <Query query={GET_PLANET_QUERY} variables={{selectedPlanetId: props.selectedPlanetId}}>
-            {({loading, error, data}) => {
+        <Query query={GET_PLANET_QUERY} variables={{ selectedPlanetId: props.selectedPlanetId }}>
+            {({ loading, error, data }) => {
                 if (loading) return <Tr><Td>Loading...</Td></Tr>;
                 if (error) return <Tr><Td>Error :(</Td></Tr>;
 
@@ -126,7 +126,7 @@ function PlanetModal(props) {
                         <Td planetAttributeName>Residents</Td>
                         <Td planetAttributeName>Films</Td>
                     </Tr>
-                    <PlanetAttributes/>
+                    <PlanetAttributes />
                     </tbody>
                 </Table>
             </ModalCard>
@@ -187,6 +187,10 @@ PlanetModal.propTypes = {
     shouldBeVisible: PropTypes.bool.isRequired,
     setShoudShowPlanetDetails: PropTypes.func.isRequired,
     selectedPlanetId: PropTypes.string
+};
+
+PlanetModal.defaultProps = {
+    selectedPlanetId: ''
 };
 
 export default PlanetModal;

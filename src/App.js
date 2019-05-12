@@ -3,7 +3,7 @@ import {ApolloProvider} from "react-apollo";
 import ApolloClient from "apollo-boost";
 import './App.css'
 
-import AllPlanets from "./copmonents/AllPlanets";
+import AllPlanets from "./components/AllPlanets";
 
 const client = new ApolloClient({
     uri: "https://swapi.apis.guru/\n"

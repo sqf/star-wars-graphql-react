@@ -1,15 +1,15 @@
 import React from 'react';
 
-import {configure, shallow, mount} from 'enzyme';
+import { configure, shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import {MockedProvider} from 'react-apollo/test-utils';
+import { MockedProvider } from 'react-apollo/test-utils';
 
 import Modal from 'react-modal';
 
 import PlanetModal from './PlanetModal';
-import {GET_PLANET_QUERY} from './PlanetModal';
+import { GET_PLANET_QUERY } from './PlanetModal';
 
-configure({adapter: new Adapter()});
+configure({ adapter: new Adapter() });
 
 const SOME_FAKE_PLANET_ID = 'cGxhbmV0czo3';
 const SOME_FAKE_PLANET_NAME = 'Endor';
@@ -21,8 +21,8 @@ const SOME_FAKE_PLANET_POPULATION = 1000;
 const SOME_FAKE_PLANET_CLIMATES = ['temperate', 'tropical'];
 const SOME_FAKE_PLANET_TERRAINS = ['jungle', 'rainforests'];
 const SOME_FAKE_PLANET_SURFACE_WATER = 8;
-const SOME_FAKE_PLANET_RESIDENTS = [{name: 'Luke Skywalker'}, {name: 'C-3PO'}, {name: 'Darth Vader'}];
-const SOME_FAKE_PLANET_FILMS = [{title: 'A New Hope'}, {title: 'Return of the Jedi'}, {title: 'The Phantom Menace'}];
+const SOME_FAKE_PLANET_RESIDENTS = [{ name: 'Luke Skywalker' }, { name: 'C-3PO' }, { name: 'Darth Vader' }];
+const SOME_FAKE_PLANET_FILMS = [{ title: 'A New Hope' }, { title: 'Return of the Jedi' }, { title: 'The Phantom Menace' }];
 
 const EXPECTED_CLIMATES_OUTPUT = 'temperate, tropical';
 const EXPECTED_TERRAINS_OUTPUT = 'jungle, rainforests';
@@ -68,14 +68,16 @@ describe('<PlanetModal />', () => {
         };
 
     it('should render a modal', () => {
-        const wrapper = shallow(<PlanetModal shouldBeVisible={true} setShoudShowPlanetDetails={() => {
-        }}/>);
+        const wrapper = shallow(<PlanetModal shouldBeVisible={true}
+                                    setShoudShowPlanetDetails={() => { }} />);
+
         expect(wrapper.find(Modal)).toHaveLength(1);
     });
 
     it('should call setShoudShowPlanetDetails method with argument set to false when close button is clicked', () => {
         const clickCallback = jest.fn();
-        const wrapper = shallow(<PlanetModal shouldBeVisible={true} setShoudShowPlanetDetails={clickCallback} />);
+        const wrapper = shallow(<PlanetModal shouldBeVisible={true}
+                                    setShoudShowPlanetDetails={clickCallback} />);
 
         wrapper.find('CloseButton').simulate("click");
 
@@ -85,8 +87,9 @@ describe('<PlanetModal />', () => {
     describe('Planet attributes', () => {
         const wrapper = mount(
             <MockedProvider mocks={[queryMock]} addTypename={false}>
-                <PlanetModal shouldBeVisible={true} setShoudShowPlanetDetails={() => {
-                }} selectedPlanetId={SOME_FAKE_PLANET_ID} />
+                <PlanetModal shouldBeVisible={true}
+                    setShoudShowPlanetDetails={() => { }}
+                    selectedPlanetId={SOME_FAKE_PLANET_ID} />
             </MockedProvider>
         );
 
@@ -94,79 +97,22 @@ describe('<PlanetModal />', () => {
             expect(wrapper.find('table')).toHaveLength(1);
         });
 
-        it('should render correct name value when query succeeds', () => {
+        it('should render correct values in the table when query succeeds', () => {
             return executeMockProviderTestCase(wrapper).then(() => {
-                const rows = wrapper.find('tbody').find('tr').find('td').map(column => column.text());
+                const rows = wrapper.find('tbody')
+                .find('tr')
+                .find('td')
+                .map(column => column.text());
                 expect(rows[11]).toEqual(SOME_FAKE_PLANET_NAME);
-            });
-        });
-
-        it('should render correct diameter value when query succeeds', () => {
-            return executeMockProviderTestCase(wrapper).then(() => {
-                const rows = wrapper.find('tbody').find('tr').find('td').map(column => column.text());
                 expect(rows[12]).toEqual(SOME_FAKE_PLANET_DIAMETER.toString());
-            });
-        });
-
-        it('should render correct rotation period value when query succeeds', () => {
-            return executeMockProviderTestCase(wrapper).then(() => {
-                const rows = wrapper.find('tbody').find('tr').find('td').map(column => column.text());
                 expect(rows[13]).toEqual(SOME_FAKE_PLANET_ROTATION_PERIOD.toString());
-            });
-        });
-
-        it('should render correct orbital period value when query succeeds', () => {
-            return executeMockProviderTestCase(wrapper).then(() => {
-                const rows = wrapper.find('tbody').find('tr').find('td').map(column => column.text());
                 expect(rows[14]).toEqual(SOME_FAKE_PLANET_ORBITAL_PERIOD.toString());
-            });
-        });
-
-        it('should render correct gravity value when query succeeds', () => {
-            return executeMockProviderTestCase(wrapper).then(() => {
-                const rows = wrapper.find('tbody').find('tr').find('td').map(column => column.text());
                 expect(rows[15]).toEqual(SOME_FAKE_PLANET_GRAVITY);
-            });
-        });
-
-        it('should render correct population value when query succeeds', () => {
-            return executeMockProviderTestCase(wrapper).then(() => {
-                const rows = wrapper.find('tbody').find('tr').find('td').map(column => column.text());
                 expect(rows[16]).toEqual(SOME_FAKE_PLANET_POPULATION.toString());
-            });
-        });
-
-        it('should render correct climates value when query succeeds', () => {
-            return executeMockProviderTestCase(wrapper).then(() => {
-                const rows = wrapper.find('tbody').find('tr').find('td').map(column => column.text());
                 expect(rows[17]).toEqual(EXPECTED_CLIMATES_OUTPUT);
-            });
-        });
-
-        it('should render correct terrains value when query succeeds', () => {
-            return executeMockProviderTestCase(wrapper).then(() => {
-                const rows = wrapper.find('tbody').find('tr').find('td').map(column => column.text());
                 expect(rows[18]).toEqual(EXPECTED_TERRAINS_OUTPUT);
-            });
-        });
-
-        it('should render correct surface water value when query succeeds', () => {
-            return executeMockProviderTestCase(wrapper).then(() => {
-                const rows = wrapper.find('tbody').find('tr').find('td').map(column => column.text());
                 expect(rows[19]).toEqual(SOME_FAKE_PLANET_SURFACE_WATER.toString());
-            });
-        });
-
-        it('should render correct planet residents value when query succeeds', () => {
-            return executeMockProviderTestCase(wrapper).then(() => {
-                const rows = wrapper.find('tbody').find('tr').find('td').map(column => column.text());
                 expect(rows[20]).toEqual(EXPECTED_RESIDENTS_OUTPUT);
-            });
-        });
-
-        it('should render correct planet films value when query succeeds', () => {
-            return executeMockProviderTestCase(wrapper).then(() => {
-                const rows = wrapper.find('tbody').find('tr').find('td').map(column => column.text());
                 expect(rows[21]).toEqual(EXPECTED_FILMS_OUTPUT);
             });
         });

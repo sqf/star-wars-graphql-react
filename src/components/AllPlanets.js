@@ -4,7 +4,6 @@ import {Query} from "react-apollo";
 import styled from "styled-components";
 import PlanetModal from "./PlanetModal";
 
-
 const OFFSET = 10;
 
 const GET_ALL_PLANETS_QUERY = gql`
@@ -27,7 +26,13 @@ const GET_ALL_PLANETS_QUERY = gql`
 function AllPlanets() {
     const [shoudShowPlanetDetails, setShoudShowPlanetDetails] = useState(false);
     const [selectedPlanetId, setSelectedPlanetId] = useState(null);
-    const [paginationState, setPaginationState] = useState({first: OFFSET, last: null, startCursor: null, endCursor: null, counter: 0});
+    const [paginationState, setPaginationState] = useState({
+        first: OFFSET,
+        last: null,
+        startCursor: null,
+        endCursor: null,
+        counter: 0
+    });
 
     function handlePlanetClick() {
         setSelectedPlanetId(this.planetId);
@@ -36,18 +41,33 @@ function AllPlanets() {
 
     function handleNextPageClick() {
         if (this.isNextPageAvailable)
-            setPaginationState({first: OFFSET, last: null, startCursor: null, endCursor: this.pageInfo.endCursor, counter: paginationState.counter + 1});
+            setPaginationState({
+                first: OFFSET,
+                last: null,
+                startCursor: null,
+                endCursor: this.pageInfo.endCursor,
+                counter: paginationState.counter + 1});
     }
 
     function handlePreviousPageClick() {
         if (this.isPreviousPageAvailable)
-            setPaginationState({first: null, last: OFFSET, startCursor: this.pageInfo.startCursor, endCursor: null, counter: paginationState.counter - 1});
+            setPaginationState({
+                first: null,
+                last: OFFSET,
+                startCursor: this.pageInfo.startCursor,
+                endCursor: null,
+                counter: paginationState.counter - 1
+            });
     }
 
     const PlanetsList = () => (
         <Query
             query={GET_ALL_PLANETS_QUERY}
-     variables={{ first: paginationState.first, last: paginationState.last, cursorBefore: paginationState.startCursor, cursorAfter: paginationState.endCursor }}>
+            variables={{
+                first: paginationState.first,
+                last: paginationState.last,
+                cursorBefore: paginationState.startCursor,
+                cursorAfter: paginationState.endCursor}}>
             {({loading, error, data}) => {
                 if (loading) return <div>Loading...</div>;
                 if (error) return <div>Error :(</div>;
@@ -63,14 +83,14 @@ function AllPlanets() {
                 const isNextPageAvailable = paginationState.counter + 1 < data.allPlanets.totalCount / OFFSET;
                 const paginationComponents = (
                     <div>
-                        <PaginationComopnent isAvailable={isPreviousPageAvailable}
+                        <PaginationComponent isAvailable={isPreviousPageAvailable}
                             onClick={handlePreviousPageClick.bind({isPreviousPageAvailable, pageInfo: data.allPlanets.pageInfo})}>
                             Previous
-                        </PaginationComopnent>
-                        <PaginationComopnent isAvailable={isNextPageAvailable}
+                        </PaginationComponent>
+                        <PaginationComponent isAvailable={isNextPageAvailable}
                             onClick={handleNextPageClick.bind({isNextPageAvailable, pageInfo: data.allPlanets.pageInfo})}>
                             Next
-                        </PaginationComopnent>
+                        </PaginationComponent>
                     </div>);
 
                 return (
@@ -104,7 +124,7 @@ function AllPlanets() {
     );
 }
 
-const PaginationComopnent = styled.span`
+const PaginationComponent = styled.span`
     margin: 5px;
     opacity:  ${props => props.isAvailable ? 1 : 0.4};
     color: yellow;
