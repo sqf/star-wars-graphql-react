@@ -36,8 +36,6 @@ function AllPlanets() {
       query AllPlanets($first: Int, $last: Int, $cursorBefore: String, $cursorAfter: String) {
         allPlanets(first: $first, last: $last, before: $cursorBefore, after: $cursorAfter) {
           pageInfo {
-            hasNextPage
-            hasPreviousPage
             startCursor
             endCursor
           }
@@ -45,16 +43,6 @@ function AllPlanets() {
             id
             name
             diameter
-            rotationPeriod
-            orbitalPeriod
-            gravity
-            population
-            climates
-            terrains
-            surfaceWater
-            created
-            edited
-            id
           }
           totalCount
         }
