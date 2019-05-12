@@ -67,7 +67,7 @@ describe('<PlanetModal />', () => {
             }
         };
 
-    it('should render modal', () => {
+    it('should render a modal', () => {
         const wrapper = shallow(<PlanetModal shouldBeVisible={true} setShoudShowPlanetDetails={() => {
         }}/>);
         expect(wrapper.find(Modal)).toHaveLength(1);

@@ -1,13 +1,9 @@
 import React, {Fragment, useState} from 'react';
-import ApolloClient from "apollo-boost";
 import gql from "graphql-tag";
-import {ApolloProvider, Query} from "react-apollo";
+import {Query} from "react-apollo";
 import styled from "styled-components";
 import PlanetModal from "./PlanetModal";
 
-const client = new ApolloClient({
-    uri: "https://swapi.apis.guru/\n"
-});
 
 const OFFSET = 10;
 
@@ -98,13 +94,13 @@ function AllPlanets() {
     );
 
     return (
-        <ApolloProvider client={client}>
+        <Fragment>
             <PlanetsList />
             <PlanetModal
                 shouldBeVisible={shoudShowPlanetDetails}
                 setShoudShowPlanetDetails={setShoudShowPlanetDetails}
                 selectedPlanetId={selectedPlanetId} />
-        </ApolloProvider>
+        </Fragment>
     );
 }
 
