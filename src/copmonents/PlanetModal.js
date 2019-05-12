@@ -39,7 +39,6 @@ function PlanetModal(props) {
     const PlanetAttributes = () => (
         <Query query={GET_PLANET_QUERY} variables={{selectedPlanetId: props.selectedPlanetId}}>
             {({loading, error, data}) => {
-                console.log(data);
                 if (loading) return <Tr><Td>Loading...</Td></Tr>;
                 if (error) return <Tr><Td>Error :(</Td></Tr>;
 
@@ -180,6 +179,8 @@ const CloseButton = styled.button`
   &:hover {
     cursor: pointer;
   }`;
+
+CloseButton.displayName = 'CloseButton';
 
 // PropTypes
 PlanetModal.propTypes = {

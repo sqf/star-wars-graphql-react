@@ -30,13 +30,12 @@ const EXPECTED_RESIDENTS_OUTPUT = 'Luke Skywalker, C-3PO, Darth Vader';
 const EXPECTED_FILMS_OUTPUT = 'A New Hope, Return of the Jedi, The Phantom Menace';
 
 describe('<PlanetModal />', () => {
-
     const wait = (time = 0) => new Promise(res => setTimeout(res, time));
     const executeMockProviderTestCase = (wrapperInstance) => {
         return wait(100).then(() => wrapperInstance.update());
     };
 
-    const mocks = [
+    const queryMock =
         {
             request: {
                 query: GET_PLANET_QUERY,
@@ -66,8 +65,7 @@ describe('<PlanetModal />', () => {
                     }
                 }
             }
-        }
-    ];
+        };
 
     it('should render modal', () => {
         const wrapper = shallow(<PlanetModal shouldBeVisible={true} setShoudShowPlanetDetails={() => {
@@ -75,11 +73,20 @@ describe('<PlanetModal />', () => {
         expect(wrapper.find(Modal)).toHaveLength(1);
     });
 
+    it('should call setShoudShowPlanetDetails method with argument set to false when close button is clicked', () => {
+        const clickCallback = jest.fn();
+        const wrapper = shallow(<PlanetModal shouldBeVisible={true} setShoudShowPlanetDetails={clickCallback} />);
+
+        wrapper.find('CloseButton').simulate("click");
+
+        expect(clickCallback).toHaveBeenCalledWith(false);
+    });
+
     describe('Planet attributes', () => {
         const wrapper = mount(
-            <MockedProvider mocks={mocks} addTypename={false}>
+            <MockedProvider mocks={[queryMock]} addTypename={false}>
                 <PlanetModal shouldBeVisible={true} setShoudShowPlanetDetails={() => {
-                }} selectedPlanetId={SOME_FAKE_PLANET_ID}/>
+                }} selectedPlanetId={SOME_FAKE_PLANET_ID} />
             </MockedProvider>
         );
 
@@ -163,6 +170,5 @@ describe('<PlanetModal />', () => {
                 expect(rows[21]).toEqual(EXPECTED_FILMS_OUTPUT);
             });
         });
-
     });
 });
